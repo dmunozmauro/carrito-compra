@@ -1,0 +1,33 @@
+import { Route, Router, Switch } from "react-router-dom";
+import routes from "./routes";
+import { createBrowserHistory } from "history";
+import './App.css';
+
+const historial = createBrowserHistory();
+
+function App() {
+
+  const RouteWithSubRoutes = (route) => (
+    <Route
+      path={route.path}
+      exact={route.exact}
+      key={`route${route.path}`}
+      render={(props) => {
+        return (<route.Component {...props} routes={route.routes} />)
+      }}
+    />
+  );
+
+
+  return (
+    <Router history={historial}>
+      <Switch>
+        {routes.map((route, index) => (
+          <RouteWithSubRoutes key={index} {...route} exact />
+        ))}
+      </Switch>
+    </Router>
+  );
+}
+
+export default App;
