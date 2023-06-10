@@ -1,23 +1,31 @@
 import { sequel } from ".."
 import { QueryTypes } from 'sequelize'
 
-export const addProductoCarritoDao = async (id_producto, cantidad_agregada, vendido, t) => {
-    let query = `insert into carrito(id_producto, cantidad_agregada, vendido) values($1, $2, $3)`;
+export const getAllCarritoDao = async () => {
+    let query = `select * from carrito`;
+
+    return await sequel.query(query, {
+        type: QueryTypes.SELECT
+    });
+}
+
+export const addProductoCarritoDao = async (id_producto, t) => {
+    let query = `insert into carrito(id_producto, cantidad_agregada, vendido) values($1, 1, false)`;
 
     return await sequel.query(query, {
         type: QueryTypes.INSERT,
         transaction: t,
-        bind: [id_producto, cantidad_agregada, vendido]
+        bind: [id_producto]
     });
 }
 
-export const updCantidadProductosDao = async (id_producto, cantidad_agregada, t) => {
-    let query = `update productos set cantidad = cantidad - $2 where id = $1 `;
+export const updCantidadProductosDao = async (id_producto, t) => {
+    let query = `update productos set cantidad = cantidad - 1 where id = $1 `;
 
     return await sequel.query(query, {
         type: QueryTypes.UPDATE,
         transaction: t,
-        bind: [id_producto, cantidad_agregada]
+        bind: [id_producto]
     });
 }
 
